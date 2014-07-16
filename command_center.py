@@ -27,6 +27,7 @@ class CommandCenter(object):
         :return: mail of next duty officer
         """
         if officer_index is not None:
+            # WOW here is the bug!
             officer = officer_index + 1
             if officer != self._OFFICER_NOT_FOUND:
                 return officer
@@ -45,5 +46,8 @@ class CommandCenter(object):
                 pass
         return self._OFFICER_NOT_FOUND
 
-    def personal_message(self, message_for, duty_dev, duty_senior):
-        pass
+    def change_myself(self, message_for, duty_officer):
+        if message_for == duty_officer:
+            # probably we need to take next for him
+            duty_officer = self.get_next_on_duty(message_for)
+        return duty_officer
