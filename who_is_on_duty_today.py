@@ -62,8 +62,8 @@ def main():
     all_officers = reduce(lambda x, y: x+y, officers.values())
 
     for dev in all_officers:
-        d1 = dev_cc.personal_message(dev, duty_dev, duty_senior)
-        d2 = senior_cc.personal_message(dev, duty_dev, duty_senior)
+        d1 = dev_cc.personal_message(dev, duty_officer)
+        d2 = senior_cc.personal_message(dev, duty_officer)
         send_mail(dev, d1, d2)
 
 
