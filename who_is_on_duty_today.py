@@ -48,12 +48,12 @@ def main():
     _prev_state = _load_state(STATE_JSON)
 
     # TODO: Refactor
-    dev_args = officers['dev_list'], _prev_state['dev']
-    senior_args = officers['senior_list'], _prev_state['senior']
+    dev_args = officers['dev_list'], _prev_state.get('dev')
+    senior_args = officers['senior_list'], _prev_state.get('senior')
     dev_cc = CommandCenter(*dev_args)
     senior_cc = CommandCenter(*senior_args)
-    duty_dev = dev_cc.get_next_on_duty(dev_args[1])
-    duty_senior = senior_cc.get_next_on_duty(senior_args[1])
+    duty_dev = dev_cc.get_next_duty_index(dev_args[1])
+    duty_senior = senior_cc.get_next_duty_index(senior_args[1])
     # save new duty state for both dev and senior lists
     _prev_state.update({'dev': duty_dev, 'senior': duty_senior})
     _save_state(_prev_state, STATE_JSON)
@@ -62,8 +62,8 @@ def main():
     all_officers = reduce(lambda x, y: x+y, officers.values())
 
     for dev in all_officers:
-        d1 = dev_cc.personal_message(dev, duty_officer)
-        d2 = senior_cc.personal_message(dev, duty_officer)
+        d1 = dev_cc.get_individual_assigment(dev, duty_dev)
+        d2 = senior_cc.get_individual_assigment(dev, duty_senior)
         send_mail(dev, d1, d2)
 
 

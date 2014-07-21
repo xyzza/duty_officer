@@ -6,8 +6,6 @@ class CommandCenter(object):
     This class take care about rotating list of officers,
     and assigning duty officer
     """
-    _OFFICER_NOT_FOUND = 'Officer not found :('
-    _mail_map = None
 
     def __init__(self, officer_list, last_on_duty):
         u"""
@@ -16,21 +14,16 @@ class CommandCenter(object):
         """
         self.officer_list = officer_list
         self.last_on_duty = last_on_duty
-        # generate {'username': 'user_email'} map
-        self._mail_map = dict(map(lambda m: (m.split('@')[0], m),
-                                  self.officer_list))
 
-    def get_next_on_duty(self, officer_index):
+    def get_next_duty_index(self, officer_index):
         u"""
-        Return next duty officer
+        Return next duty officer index
         :param officer_index: int or None index of officer
         :return: mail of next duty officer
         """
-        if officer_index is not None:
-            # WOW here is the bug!
-            officer = officer_index + 1
-            if officer != self._OFFICER_NOT_FOUND:
-                return officer
+        if (officer_index is not None) and (
+                len(self.officer_list) > officer_index + 1):
+            return officer_index + 1
         # return index of first active member
         return 0
 
@@ -44,10 +37,18 @@ class CommandCenter(object):
                 return self.officer_list[officer_index]
             except IndexError:
                 pass
-        return self._OFFICER_NOT_FOUND
+        #FIXME: What I should to return?
+        return None
 
-    def change_myself(self, message_for, duty_officer):
-        if message_for == duty_officer:
+    def get_individual_assigment(self, message_for, duty_officer):
+        """
+        TODO doc
+        :param message_for:
+        :param duty_officer:
+        :return:
+        """
+        if message_for == self.get_officer_by_index(duty_officer):
             # probably we need to take next for him
-            duty_officer = self.get_next_on_duty(message_for)
-        return duty_officer
+            duty_officer = self.get_next_duty_index(duty_officer)
+
+        return self.get_officer_by_index(duty_officer)
