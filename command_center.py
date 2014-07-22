@@ -40,15 +40,21 @@ class CommandCenter(object):
         #FIXME: What I should to return?
         return None
 
-    def get_individual_assigment(self, message_for, duty_officer):
+    def get_individual_assigment(self, message_for, duty_officer_indx):
         """
         TODO doc
         :param message_for:
-        :param duty_officer:
+        :param duty_officer_indx:
         :return:
         """
-        if message_for == self.get_officer_by_index(duty_officer):
+        assigned_officer_indx = duty_officer_indx
+        # TODO: refactor
+        if message_for == self.get_officer_by_index(duty_officer_indx):
             # probably we need to take next for him
-            duty_officer = self.get_next_duty_index(duty_officer)
+            assigned_officer_indx = self.get_next_duty_index(duty_officer_indx)
+            # still the same person: we have only one duty officer in list
+            if message_for == self.get_officer_by_index(assigned_officer_indx):
+                # should return None: we cant do assignment :(
+                assigned_officer_indx = None
 
-        return self.get_officer_by_index(duty_officer)
+        return self.get_officer_by_index(assigned_officer_indx)
