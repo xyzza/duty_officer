@@ -8,8 +8,8 @@ import json
 from email.mime.text import MIMEText
 from command_center import CommandCenter
 
-OFFICERS_JSON = '.officers.json'
-STATE_JSON = '.state.json'
+OFFICERS_JSON = '.officers_kinder.json'
+STATE_JSON = '.state_kinder.json'
 CONFIG_JSON = '.config.json'
 
 def _save_state(state, destination):
@@ -50,7 +50,7 @@ def send_mail(to, d1, d2, user, password, debug=True):
 
     s = smtplib.SMTP('mail.bars-open.ru')
     s.login(user, password)
-    s.sendmail(msg['From'], [msg['To'],], msg.as_string())
+    s.sendmail(msg['From'], [msg['To'], 'akhmadiev@bars-open.ru'], msg.as_string())
     s.quit()
 
 
