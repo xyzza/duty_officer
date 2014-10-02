@@ -1,8 +1,8 @@
 # coding:utf-8
-from app.base import LocalizationObject
+from app.base import DomainModel
 
 
-class Work(LocalizationObject):
+class Work(DomainModel):
     u"""
     Это класс работы, работа получает несколько очередей бравых солдат,
     готовых выполнять работу. Солдаты ведь так любят работать.. =)

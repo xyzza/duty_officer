@@ -1,18 +1,12 @@
 # coding:utf-8
-from app import app
-from flask import request
-from flask.ext.restful import Resource, Api
+from flask import Flask
+from flask.ext.restful import Api
+from app.persons.resource import PersonRes, PersonListRes
 
+
+app = Flask(__name__)
 api = Api(app)
 
 
-class TodoSimple(Resource):
-    def get(self, todo_id):
-        return {todo_id: todos[todo_id]}
-
-    def put(self, todo_id):
-        todos[todo_id] = request.form['data']
-        return {todo_id: todos[todo_id]}
-
-
-api.add_resource(TodoSimple, '/todo/<int:todo_id>', endpoint='todo_ep')
+api.add_resource(PersonListRes, '/persons')
+api.add_resource(PersonRes, '/person/<string:person_id>')

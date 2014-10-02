@@ -2,71 +2,40 @@
 """
 Black magic
 """
-from flask.ext.restful import Resource
-from app.locale_app import lc
-from abc import ABCMeta
-import threading
 
 
-class LocalizationObject(object):
-    """
-    Auto localization for all subclass
-    """
+class DomainModel(object):
     pass
 
 
-class ManagerSingletonABS(LocalizationObject):
+class BaseProvider(object):
     u"""
-    Абстрактный класс для всех Одиночек, управляющих чем-либо
+    BASE Provider class for CRUD operations
     """
-    __metaclass__ = ABCMeta
-    __singleton_lock = threading.Lock()
-    __instance = None
-    __objects = [] # It will be bug, if state will be stored in memory like this
-    # can be different state in different process (pre-fork\worker web-server)
-    #TODO, FIXME: make persistent storage
+    # Encapsulate data source - it can be SQL DB, or file or else
+    data_source = None
 
-    def __new__(cls, *args, **kwargs):
-        with cls.__singleton_lock:
-            if cls.__instance is None:
-                cls.__instance = super(ManagerSingletonABS,
-                                      cls).__new__(cls, *args, **kwargs)
-        return cls.__instance
+    @classmethod
+    def create(cls, *args, **kwargs):
+        return {1: u"created mock object from provider"}
+        # return cls.data_source.create(*args, **kwargs)
 
-    def get_all_elemens(self):
-        u"""
-        Получаем список всех подконтрольных элементов
-        """
-        return self.__objects
+    @classmethod
+    def update(cls, obj_id):
+        return {1: u"updated mock object from provider"}
+        # return cls.data_source.update(obj_id)
 
-    def register(self, el):
-        u"""
-        Добавляем к списку новый подконтрольный элемент
-        """
-        with self.__class__.__singleton_lock:
-            self.__objects.append(el)
+    @classmethod
+    def get(cls, obj_id):
+        return {1: u"mock object from provider"}
+        # return cls.data_source.get(obj_id)
 
-    def un_register(self, el):
-        u"""
-        Удаляем ненужный подконтрольный элемент
-        """
-        with self.__class__.__singleton_lock:
-            self.__objects.remove(el)
+    @classmethod
+    def records(cls):
+        return [{1: u"mock object from provider records"}, ]
+        # return cls.data_source.records()
 
-
-class BaseResource(Resource):
-    u"""
-    Базовый класс для ресурсов, работающих с менеджерами
-    """
-    __metaclass__ = ABCMeta
-
-    manager = None
-
-    def get(self, resource_id):
-        pass
-
-    def put(self):
-        pass
-
-    def delete(self, resource_id):
-        pass
+    @classmethod
+    def delete(cls, obj_id):
+        return {1: u"deleted mock object from provider"}
+        # return cls.data_source.delete(obj_id)

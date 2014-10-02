@@ -1,8 +1,8 @@
 # coding:utf-8
-from app.base import LocalizationObject
+from app.base import DomainModel
 
 
-class Schedule(LocalizationObject):
+class Schedule(DomainModel):
     u"""
     Класс расписания, показывает расписание для объекта.
     Объектом омжет быть сотрудник, группа сотрудников, работа.
@@ -23,7 +23,7 @@ class Schedule(LocalizationObject):
         self.stop_date = stop
 
 
-class ScheduleExclude(LocalizationObject):
+class ScheduleExclude(DomainModel):
     u"""
     Объект представляет собой исключения в расписании для некоторого объекта
     """
