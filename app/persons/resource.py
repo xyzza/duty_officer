@@ -10,19 +10,21 @@ class PersonRes(Resource):
     """
 
     def get(self, person_id):
-        return {person_id: Person.get(person_id)}
+        return Person.get(person_id)
 
     def put(self, person_id):
-        return Person.update(**request.form)
+        return Person.update(person_id, **request.form)
 
     def delete(self, person_id):
-        return Person.delete(person_id)
+        try:
+            return Person.delete(person_id)
+        except KeyError:
+            return "Person with this key not found!"
 
 
 class PersonListRes(Resource):
     u"""
     """
-
     def post(self):
         parser = reqparse.RequestParser()
         parser.add_argument('name', type=unicode)

@@ -4,3 +4,4 @@
 .officers.json
 .config.json
 atlassian*
+/app/storage

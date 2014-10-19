@@ -1,10 +1,10 @@
 # coding:utf-8
-from app.base import BaseProvider, DomainModel
+from app.base import BaseProvider, DomainModel, SerializedFileSource
 
 
 class PersonProvider(BaseProvider):
     #TODO: create some data_source for it
-    data_source = None
+    data_source = SerializedFileSource
 
 
 class Person(DomainModel, PersonProvider):
@@ -16,6 +16,12 @@ class Person(DomainModel, PersonProvider):
     # person have a contacts, contacts must be email
     #TODO: make contacts structure for multiple accs, like twi, fb etc
     contacts = None
+
+    @classmethod
+    def _load_domain(cls, obj=None, *args, **kwargs):
+        if obj:
+            obj.update(**kwargs)
+        return obj if obj else kwargs
 
     def __init__(self, name, contacts, days):
         """
