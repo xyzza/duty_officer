@@ -52,26 +52,26 @@ class BaseProvider(object):
         return cls.data_source.delete_from_persistent(obj_id)
 
 
-class SerializedFileSource(object):
+class JSONFileSource(object):
     u"""
     That Source store data in the dict
     dict serializes to JSON, and then stored in file
     """
     # all rows
     _state = {}
+    _source_file = None
     __updated = True
-    __source_file = 'app/storage/persons.json'
 
     @classmethod
     def _save_to_file(cls):
         _state = json.dumps(cls._state)
-        with open(cls.__source_file, "w") as f:
+        with open(cls._source_file, "w") as f:
             f.write(_state)
 
     @classmethod
     def _read_from_file(cls):
         if cls.__updated:
-            with open(cls.__source_file, "r") as f:
+            with open(cls._source_file, "r") as f:
                 _state = f.read()
                 try:
                     cls._state = json.loads(_state)

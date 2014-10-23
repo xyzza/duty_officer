@@ -1,15 +1,20 @@
 # coding:utf-8
-from app.base import BaseProvider, DomainModel, SerializedFileSource
+from app.base import BaseProvider, DomainModel, JSONFileSource
 
 
-class PersonProvider(BaseProvider):
-    #TODO: create some data_source for it
-    data_source = SerializedFileSource
+class PersonStorage(JSONFileSource):
+    u"""Store all data in JSON format in file """
+    _source_file = 'app/storage/persons.json'
 
 
-class Person(DomainModel, PersonProvider):
+class PersonProviderMixin(BaseProvider):
+    u""" Provider provide CRUD operation API for Person model"""
+    data_source = PersonStorage
+
+
+class PersonMixin(DomainModel, PersonProviderMixin):
     u"""
-    Person who will do the work
+    Domain model. Simulates the Person object
     """
     # person have a name, name must be a unicode string
     name = None
@@ -19,6 +24,13 @@ class Person(DomainModel, PersonProvider):
 
     @classmethod
     def _load_domain(cls, obj=None, *args, **kwargs):
+        """
+        implement _load_domain method from PersonProviderMixin
+        :param obj:
+        :param args:
+        :param kwargs:
+        :return:
+        """
         if obj:
             obj.update(**kwargs)
         return obj if obj else kwargs
@@ -31,7 +43,6 @@ class Person(DomainModel, PersonProvider):
         """
         self.name = name
         self.contacts = contacts
-
 
 # class PersonQueue(object):
 #     u"""
@@ -51,12 +62,3 @@ class Person(DomainModel, PersonProvider):
 #
 #     def prev(self):
 #         pass
-
-
-# class QueueGroup(object):
-#     u"""
-#     Очереди можно объединять в группы
-#     """
-#     groups = None
-#
-#     def __init__(self, ):
