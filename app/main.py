@@ -18,6 +18,7 @@ class Queue(object):
             u"Queue can't be empty!"
 
     def current(self):
+        #TODO: maybe we should return a position number instead of value
         return self._units[self._current]
 
     def append(self, unit):
@@ -28,12 +29,12 @@ class Queue(object):
         self._units.insert(position, unit)
         return len(self._units)
 
-    def next(self):
+    def forward(self):
         self._current += 1
         if self._current == len(self._units):
             self._current = 0
         assert self._current < len(self._units)
-        return self._current
+        return self.current()
 
     def __repr__(self):
         return "units is <{0}>, current is {1} ".format(
@@ -48,30 +49,27 @@ def queue_test():
     queue = Queue(['a', 'b', 'c'])
 
     assert queue.current() == 'a'
-    queue.next()
-    assert queue.current() == 'b'
-    queue.next()
-    assert queue.current() == 'c'
-    queue.next()
+    assert queue.forward() == 'b'
+    assert queue.forward() == 'c'
+
+    assert queue.append('d') == 4
+    assert queue.forward() == 'd'
+    assert queue.forward() == 'a'
+
+    # insertion doesn't change current index!
+    assert queue.insert(1, 'q') == 5
+    # check we still in position 0
+    #TODO: maybe we should return a position number instead of value
     assert queue.current() == 'a'
-
-    queue.append('d')
-    queue.next()
-    queue.next()
-    queue.next()
-
-    assert queue.current() == 'd'
-    queue.insert(1, 'q')
-
-    queue.next()
-    queue.next()
-    queue.next()
-    assert queue.current() == 'q'
+    assert queue.forward() == 'q'
 
     try:
         Queue([])
     except AssertionError, e:
         assert e.message == u"Queue can't be empty!"
+
+
+
 
 
 if __name__ == "__main__":
